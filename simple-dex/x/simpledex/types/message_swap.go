@@ -1,6 +1,8 @@
 package types
 
 import (
+	"strings"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -45,6 +47,21 @@ func (msg *MsgSwap) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
+	}
+	if strings.TrimSpace(msg.PortId) == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "portID is empty")
+	}
+	if strings.TrimSpace(msg.ChannelId) == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "channelID is empty")
+	}
+	if strings.TrimSpace(msg.Receiver) == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "receiver is empty")
+	}
+	if msg.Offer.IsZero() {
+		return sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "offer coins is zero")
+	}
+	if msg.MinAsk.IsZero() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "min ask is zero coins")
 	}
 	return nil
 }
