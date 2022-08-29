@@ -48,12 +48,6 @@ func (msg *MsgSwap) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
-	if strings.TrimSpace(msg.PortId) == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "portID is empty")
-	}
-	if strings.TrimSpace(msg.ChannelId) == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "channelID is empty")
-	}
 	if strings.TrimSpace(msg.Receiver) == "" {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "receiver is empty")
 	}

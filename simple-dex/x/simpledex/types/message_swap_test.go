@@ -65,30 +65,6 @@ func TestMsgSwap_ValidateBasic(t *testing.T) {
 			err: sdkerrors.ErrInvalidRequest,
 		},
 		{
-			name: "empty portid",
-			msg: MsgSwap{
-				Sender:    sample.AccAddress(),
-				Offer:     sdk.NewCoin("uatom", sdk.NewInt(100)),
-				MinAsk:    sdk.NewCoin("uosmo", sdk.NewInt(50)),
-				PortId:    "",
-				ChannelId: "channel-1",
-				Receiver:  "receiverAddr",
-			},
-			err: sdkerrors.ErrInvalidRequest,
-		},
-		{
-			name: "empty channelid",
-			msg: MsgSwap{
-				Sender:    sample.AccAddress(),
-				Offer:     sdk.NewCoin("uatom", sdk.NewInt(100)),
-				MinAsk:    sdk.NewCoin("uosmo", sdk.NewInt(50)),
-				PortId:    "transfer",
-				ChannelId: "",
-				Receiver:  "receiverAddr",
-			},
-			err: sdkerrors.ErrInvalidRequest,
-		},
-		{
 			name: "empty receiver",
 			msg: MsgSwap{
 				Sender:    sample.AccAddress(),

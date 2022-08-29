@@ -30,7 +30,7 @@ func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSw
 	}
 
 	// the following logic mocks the functionality of a dex
-	err := k.Keeper.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.AccAddress(msg.Sender), types.ModuleName, sdk.NewCoins(msg.Offer))
+	err := k.Keeper.bankKeeper.SendCoinsFromAccountToModule(ctx, sdk.MustAccAddressFromBech32(msg.Sender), types.ModuleName, sdk.NewCoins(msg.Offer))
 	if err != nil {
 		return &types.MsgSwapResponse{}, err
 	}
@@ -45,11 +45,25 @@ func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSw
 	exchangeCoin := sdk.NewCoin(msg.MinAsk.Denom, exchangeAmount)
 	err = k.Keeper.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(exchangeCoin))
 
-	// send the "exchanged" coins to the receiver in the message through transfer
-	senderAddr := k.Keeper.accountKeeper.GetModuleAddress(types.ModuleName)
-	err = k.Keeper.transferKeeper.SendTransfer(ctx, msg.PortId, msg.ChannelId, exchangeCoin, senderAddr, msg.Receiver, clienttypes.Height{}, uint64(ctx.BlockTime().Add(time.Hour).UnixNano()))
-	if err != nil {
-		return &types.MsgSwapResponse{}, err
+	// send coins to receiver on our own chain or on different chain
+	if msg.PortId != "" && msg.ChannelId != "" {
+		// if portID/channelID defined:
+		// send the "exchanged" coins to the receiver in the message through transfer
+		senderAddr := k.Keeper.accountKeeper.GetModuleAddress(types.ModuleName)
+		err = k.Keeper.transferKeeper.SendTransfer(ctx, msg.PortId, msg.ChannelId, exchangeCoin, senderAddr, msg.Receiver, clienttypes.Height{}, uint64(ctx.BlockTime().Add(time.Hour).UnixNano()))
+		if err != nil {
+			return &types.MsgSwapResponse{}, err
+		}
+	} else if msg.PortId == "" && msg.ChannelId == "" {
+		// if portID/channelID are empty
+		// do a regular bank send to the receiver on same chain
+		err = k.Keeper.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(msg.Receiver), sdk.NewCoins(exchangeCoin))
+		if err != nil {
+			return &types.MsgSwapResponse{}, err
+		}
+	} else {
+		// malformed request
+		return &types.MsgSwapResponse{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "portID and channelID must both be defined or both be empty")
 	}
 
 	return &types.MsgSwapResponse{}, nil

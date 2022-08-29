@@ -12,6 +12,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	flagPortID    = "port-id"
+	flagChannelID = "channel-id"
+)
+
 var _ = strconv.Itoa(0)
 
 func CmdSwap() *cobra.Command {
@@ -22,9 +27,7 @@ func CmdSwap() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			argOffer := args[0]
 			argMinAsk := args[1]
-			argPortID := args[2]
-			argChannelID := args[3]
-			argReceiver := args[4]
+			argReceiver := args[2]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -37,12 +40,21 @@ func CmdSwap() *cobra.Command {
 			}
 			askCoin, err := sdk.ParseCoinNormalized(argMinAsk)
 
+			portID, err := cmd.Flags().GetString(flagPortID)
+			if err != nil {
+				return err
+			}
+			channelID, err := cmd.Flags().GetString(flagChannelID)
+			if err != nil {
+				return err
+			}
+
 			msg := types.NewMsgSwap(
 				clientCtx.GetFromAddress().String(),
 				offerCoin,
 				askCoin,
-				argPortID,
-				argChannelID,
+				portID,
+				channelID,
 				argReceiver,
 			)
 			if err := msg.ValidateBasic(); err != nil {
@@ -52,6 +64,8 @@ func CmdSwap() *cobra.Command {
 		},
 	}
 
+	cmd.Flags().String(flagPortID, "", "PortID to send exchanged coins on")
+	cmd.Flags().String(flagChannelID, "", "ChannelID to send exchanged coins on")
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
