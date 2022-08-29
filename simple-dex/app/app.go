@@ -395,6 +395,9 @@ func New(
 		keys[simpledexmoduletypes.StoreKey],
 		keys[simpledexmoduletypes.MemStoreKey],
 		app.GetSubspace(simpledexmoduletypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.TransferKeeper,
 	)
 	simpledexModule := simpledexmodule.NewAppModule(appCodec, app.SimpledexKeeper, app.AccountKeeper, app.BankKeeper)
 

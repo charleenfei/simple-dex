@@ -9,12 +9,14 @@ const TypeMsgSwap = "swap"
 
 var _ sdk.Msg = &MsgSwap{}
 
-func NewMsgSwap(sender string, offer sdk.Coin, minAsk sdk.Coin, receiver string) *MsgSwap {
+func NewMsgSwap(sender string, offer sdk.Coin, minAsk sdk.Coin, portID, channelID, receiver string) *MsgSwap {
 	return &MsgSwap{
-		Sender:   sender,
-		Offer:    offer,
-		MinAsk:   minAsk,
-		Receiver: receiver,
+		Sender:    sender,
+		Offer:     offer,
+		MinAsk:    minAsk,
+		PortId:    portID,
+		ChannelId: channelID,
+		Receiver:  receiver,
 	}
 }
 
