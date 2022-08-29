@@ -1,0 +1,12 @@
+syntax = "proto3";
+package simpledex.simpledex;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "simple-dex/x/simpledex/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}
