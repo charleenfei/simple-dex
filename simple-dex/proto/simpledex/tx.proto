@@ -5,9 +5,26 @@ package simpledex.simpledex;
 
 option go_package = "simple-dex/x/simpledex/types";
 
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc Swap(MsgSwap) returns (MsgSwapResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgSwap {
+  string sender = 1;
+  cosmos.base.v1beta1.Coin offer = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin minAsk = 3 [(gogoproto.nullable) = false];
+  // information for how to send the tokens to intended receiver
+  string port_id = 4;
+  string channel_id = 5;
+  string receiver = 6;
+}
+
+message MsgSwapResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
