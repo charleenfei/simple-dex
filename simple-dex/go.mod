@@ -1,4 +1,4 @@
-module simple-dex
+module github.com/charleenfei/simple-dex/simple-dex
 
 go 1.18
 
