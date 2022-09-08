@@ -103,7 +103,14 @@ import (
 	simpledexmodule "github.com/charleenfei/simple-dex/simple-dex/x/simpledex"
 	simpledexmodulekeeper "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
 	simpledexmoduletypes "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+
+	ica "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts"
+	icahost "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/host"
+	icahostkeeper "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/host/keeper"
+	icahosttypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/host/types"
+	icatypes "github.com/cosmos/ibc-go/v3/modules/apps/27-interchain-accounts/types"
 )
 
 const (
@@ -158,6 +165,7 @@ var (
 		vesting.AppModuleBasic{},
 		monitoringp.AppModuleBasic{},
 		simpledexmodule.AppModuleBasic{},
+		ica.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
 	)
 
@@ -172,6 +180,7 @@ var (
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 		simpledexmoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+		icatypes.ModuleName:             nil,
 	}
 )
 
@@ -226,10 +235,13 @@ type App struct {
 	FeeGrantKeeper   feegrantkeeper.Keeper
 	MonitoringKeeper monitoringpkeeper.Keeper
 
+	ICAHostKeeper icahostkeeper.Keeper
+
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper        capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper   capabilitykeeper.ScopedKeeper
 	ScopedMonitoringKeeper capabilitykeeper.ScopedKeeper
+	ScopedICAHostKeeper    capabilitykeeper.ScopedKeeper
 
 	SimpledexKeeper simpledexmodulekeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
@@ -268,7 +280,7 @@ func New(
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey, monitoringptypes.StoreKey,
-		simpledexmoduletypes.StoreKey,
+		simpledexmoduletypes.StoreKey, icahosttypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -296,6 +308,7 @@ func New(
 	// grant capabilities for the ibc and ibc-transfer modules
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
+	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
 	// this line is used by starport scaffolding # stargate/app/scopedKeeper
 
 	// add keepers
@@ -358,9 +371,19 @@ func New(
 		app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
 		app.AccountKeeper, app.BankKeeper, scopedTransferKeeper,
 	)
+
+	app.ICAHostKeeper = icahostkeeper.NewKeeper(
+		appCodec, keys[icahosttypes.StoreKey], app.GetSubspace(icahosttypes.SubModuleName),
+		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
+		app.AccountKeeper, scopedICAHostKeeper, app.MsgServiceRouter(),
+	)
+	icaModule := ica.NewAppModule(nil, &app.ICAHostKeeper)
+
 	var (
 		transferModule    = transfer.NewAppModule(app.TransferKeeper)
 		transferIBCModule = transfer.NewIBCModule(app.TransferKeeper)
+
+		icaHostIBCModule = icahost.NewIBCModule(app.ICAHostKeeper)
 	)
 
 	// Create evidence Keeper for to register the IBC light client misbehaviour evidence route
@@ -407,6 +430,7 @@ func New(
 	ibcRouter := ibcporttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferIBCModule)
 	ibcRouter.AddRoute(monitoringptypes.ModuleName, monitoringModule)
+	ibcRouter.AddRoute(icahosttypes.SubModuleName, icaHostIBCModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
 
@@ -443,6 +467,7 @@ func New(
 		transferModule,
 		monitoringModule,
 		simpledexModule,
+		icaModule,
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 
@@ -471,6 +496,7 @@ func New(
 		paramstypes.ModuleName,
 		monitoringptypes.ModuleName,
 		simpledexmoduletypes.ModuleName,
+		icatypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/beginBlockers
 	)
 
@@ -495,6 +521,7 @@ func New(
 		ibctransfertypes.ModuleName,
 		monitoringptypes.ModuleName,
 		simpledexmoduletypes.ModuleName,
+		icatypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/endBlockers
 	)
 
@@ -524,6 +551,7 @@ func New(
 		feegrant.ModuleName,
 		monitoringptypes.ModuleName,
 		simpledexmoduletypes.ModuleName,
+		icatypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 	)
 
@@ -615,6 +643,22 @@ func (app *App) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.Res
 		panic(err)
 	}
 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.mm.GetVersionMap())
+
+	icaRawGenesisState := genesisState[icatypes.ModuleName]
+
+	var icaGenesisState icatypes.GenesisState
+	if err := app.cdc.UnmarshalJSON(icaRawGenesisState, &icaGenesisState); err != nil {
+		panic(err)
+	}
+
+	icaGenesisState.HostGenesisState.Params.AllowMessages = []string{"*"} // allow all msgs
+	genesisJson, err := app.cdc.MarshalJSON(icaGenesisState)
+	if err != nil {
+		panic(err)
+	}
+
+	genesisState[icatypes.ModuleName] = genesisJson
+
 	return app.mm.InitGenesis(ctx, app.appCodec, genesisState)
 }
 
@@ -739,6 +783,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(monitoringptypes.ModuleName)
 	paramsKeeper.Subspace(simpledexmoduletypes.ModuleName)
+	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
