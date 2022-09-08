@@ -10,7 +10,7 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"simple-dex/x/simpledex/types"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

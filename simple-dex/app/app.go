@@ -98,11 +98,11 @@ import (
 	monitoringpkeeper "github.com/tendermint/spn/x/monitoringp/keeper"
 	monitoringptypes "github.com/tendermint/spn/x/monitoringp/types"
 
-	"simple-dex/docs"
+	"github.com/charleenfei/simple-dex/simple-dex/docs"
 
-	simpledexmodule "simple-dex/x/simpledex"
-	simpledexmodulekeeper "simple-dex/x/simpledex/keeper"
-	simpledexmoduletypes "simple-dex/x/simpledex/types"
+	simpledexmodule "github.com/charleenfei/simple-dex/simple-dex/x/simpledex"
+	simpledexmodulekeeper "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
+	simpledexmoduletypes "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 

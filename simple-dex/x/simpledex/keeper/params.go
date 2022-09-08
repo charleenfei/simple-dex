@@ -1,8 +1,8 @@
 package keeper
 
 import (
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"simple-dex/x/simpledex/types"
 )
 
 // GetParams get all parameters as types.Params

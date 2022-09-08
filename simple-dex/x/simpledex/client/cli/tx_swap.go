@@ -3,7 +3,7 @@ package cli
 import (
 	"strconv"
 
-	"simple-dex/x/simpledex/types"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"

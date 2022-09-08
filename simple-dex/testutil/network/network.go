@@ -18,7 +18,7 @@ import (
 	tmrand "github.com/tendermint/tendermint/libs/rand"
 	tmdb "github.com/tendermint/tm-db"
 
-	"simple-dex/app"
+	"github.com/charleenfei/simple-dex/simple-dex/app"
 )
 
 type (

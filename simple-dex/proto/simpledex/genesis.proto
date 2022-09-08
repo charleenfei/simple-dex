@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "simpledex/params.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
-option go_package = "simple-dex/x/simpledex/types";
+option go_package = "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types";
 
 // GenesisState defines the simpledex module's genesis state.
 message GenesisState {

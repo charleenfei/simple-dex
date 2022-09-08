@@ -3,15 +3,15 @@ package simpledex
 import (
 	"math/rand"
 
+	"github.com/charleenfei/simple-dex/simple-dex/testutil/sample"
+	simpledexsimulation "github.com/charleenfei/simple-dex/simple-dex/x/simpledex/simulation"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
-	"simple-dex/testutil/sample"
-	simpledexsimulation "simple-dex/x/simpledex/simulation"
-	"simple-dex/x/simpledex/types"
 )
 
 // avoid unused import issue

@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
+	testkeeper "github.com/charleenfei/simple-dex/simple-dex/testutil/keeper"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	"github.com/stretchr/testify/require"
-	testkeeper "simple-dex/testutil/keeper"
-	"simple-dex/x/simpledex/types"
 )
 
 func TestGetParams(t *testing.T) {

@@ -3,8 +3,9 @@ package keeper
 import (
 	"testing"
 
-	"simple-dex/x/simpledex/keeper"
-	"simple-dex/x/simpledex/types"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
+
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"

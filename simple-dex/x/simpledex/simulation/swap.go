@@ -3,11 +3,11 @@ package simulation
 import (
 	"math/rand"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"simple-dex/x/simpledex/keeper"
-	"simple-dex/x/simpledex/types"
 )
 
 func SimulateMsgSwap(

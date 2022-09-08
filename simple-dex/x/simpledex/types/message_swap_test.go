@@ -3,7 +3,7 @@ package types
 import (
 	"testing"
 
-	"simple-dex/testutil/sample"
+	"github.com/charleenfei/simple-dex/simple-dex/testutil/sample"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"

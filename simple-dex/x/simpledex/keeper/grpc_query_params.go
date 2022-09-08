@@ -3,10 +3,10 @@ package keeper
 import (
 	"context"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"simple-dex/x/simpledex/types"
 )
 
 func (k Keeper) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {

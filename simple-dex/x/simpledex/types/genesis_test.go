@@ -3,8 +3,8 @@ package types_test
 import (
 	"testing"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	"github.com/stretchr/testify/require"
-	"simple-dex/x/simpledex/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"simple-dex/x/simpledex/types"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"

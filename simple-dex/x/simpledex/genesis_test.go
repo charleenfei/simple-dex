@@ -3,11 +3,14 @@ package simpledex_test
 import (
 	"testing"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex"
+
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
+
+	"github.com/charleenfei/simple-dex/simple-dex/testutil/nullify"
+
+	keepertest "github.com/charleenfei/simple-dex/simple-dex/testutil/keeper"
 	"github.com/stretchr/testify/require"
-	keepertest "simple-dex/testutil/keeper"
-	"simple-dex/testutil/nullify"
-	"simple-dex/x/simpledex"
-	"simple-dex/x/simpledex/types"
 )
 
 func TestGenesis(t *testing.T) {

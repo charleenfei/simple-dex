@@ -3,10 +3,10 @@ package keeper_test
 import (
 	"testing"
 
+	testkeeper "github.com/charleenfei/simple-dex/simple-dex/testutil/keeper"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	testkeeper "simple-dex/testutil/keeper"
-	"simple-dex/x/simpledex/types"
 )
 
 func TestParamsQuery(t *testing.T) {

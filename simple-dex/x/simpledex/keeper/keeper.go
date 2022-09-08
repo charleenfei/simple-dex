@@ -5,7 +5,7 @@ import (
 
 	"github.com/tendermint/tendermint/libs/log"
 
-	"simple-dex/x/simpledex/types"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"

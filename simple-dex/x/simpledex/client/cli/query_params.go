@@ -3,10 +3,10 @@ package cli
 import (
 	"context"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
-	"simple-dex/x/simpledex/types"
 )
 
 func CmdQueryParams() *cobra.Command {

@@ -1,9 +1,9 @@
 package simpledex
 
 import (
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"simple-dex/x/simpledex/keeper"
-	"simple-dex/x/simpledex/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

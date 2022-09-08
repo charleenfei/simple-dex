@@ -3,9 +3,10 @@ package main
 import (
 	"os"
 
+	"github.com/charleenfei/simple-dex/simple-dex/app"
+
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 	"github.com/ignite/cli/ignite/pkg/cosmoscmd"
-	"simple-dex/app"
 )
 
 func main() {

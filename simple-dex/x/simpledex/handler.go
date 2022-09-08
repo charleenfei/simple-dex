@@ -3,10 +3,10 @@ package simpledex
 import (
 	"fmt"
 
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/keeper"
+	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"simple-dex/x/simpledex/keeper"
-	"simple-dex/x/simpledex/types"
 )
 
 // NewHandler ...
