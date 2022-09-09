@@ -21,6 +21,7 @@ type (
 
 		accountKeeper  types.AccountKeeper
 		bankKeeper     types.BankKeeper
+		channelKeeper  types.ChannelKeeper
 		transferKeeper types.TransferKeeper
 	}
 )
@@ -32,6 +33,7 @@ func NewKeeper(
 	ps paramtypes.Subspace,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
+	channelKeeper types.ChannelKeeper,
 	transferKeeper types.TransferKeeper,
 
 ) *Keeper {
@@ -48,6 +50,7 @@ func NewKeeper(
 		paramstore:     ps,
 		accountKeeper:  accountKeeper,
 		bankKeeper:     bankKeeper,
+		channelKeeper:  channelKeeper,
 		transferKeeper: transferKeeper,
 	}
 }

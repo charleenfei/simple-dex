@@ -20,7 +20,10 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
-export type SimpledexMsgSwapResponse = object;
+export interface SimpledexMsgSwapResponse {
+  /** @format uint64 */
+  sequence?: string;
+}
 
 /**
  * Params defines the parameters for the module.

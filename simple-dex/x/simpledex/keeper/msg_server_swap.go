@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/charleenfei/simple-dex/simple-dex/x/simpledex/types"
@@ -45,11 +46,20 @@ func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSw
 	exchangeCoin := sdk.NewCoin(msg.MinAsk.Denom, exchangeAmount)
 	err = k.Keeper.bankKeeper.MintCoins(ctx, types.ModuleName, sdk.NewCoins(exchangeCoin))
 
+	var (
+		nextSeq uint64
+		found   bool
+	)
+
 	// send coins to receiver on our own chain or on different chain
 	if msg.PortId != "" && msg.ChannelId != "" {
 		// if portID/channelID defined:
 		// send the "exchanged" coins to the receiver in the message through transfer
 		senderAddr := k.Keeper.accountKeeper.GetModuleAddress(types.ModuleName)
+		nextSeq, found = k.channelKeeper.GetNextSequenceSend(ctx, msg.PortId, msg.ChannelId)
+		if found {
+			return &types.MsgSwapResponse{}, errors.New("sequence is not found")
+		}
 		err = k.Keeper.transferKeeper.SendTransfer(ctx, msg.PortId, msg.ChannelId, exchangeCoin, senderAddr, msg.Receiver, clienttypes.Height{}, uint64(ctx.BlockTime().Add(time.Hour).UnixNano()))
 		if err != nil {
 			return &types.MsgSwapResponse{}, err
@@ -66,5 +76,5 @@ func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSw
 		return &types.MsgSwapResponse{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "portID and channelID must both be defined or both be empty")
 	}
 
-	return &types.MsgSwapResponse{}, nil
+	return &types.MsgSwapResponse{Sequence: nextSeq}, nil
 }

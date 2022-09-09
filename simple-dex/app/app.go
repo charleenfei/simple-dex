@@ -420,6 +420,7 @@ func New(
 		app.GetSubspace(simpledexmoduletypes.ModuleName),
 		app.AccountKeeper,
 		app.BankKeeper,
+		app.IBCKeeper.ChannelKeeper,
 		app.TransferKeeper,
 	)
 	simpledexModule := simpledexmodule.NewAppModule(appCodec, app.SimpledexKeeper, app.AccountKeeper, app.BankKeeper)

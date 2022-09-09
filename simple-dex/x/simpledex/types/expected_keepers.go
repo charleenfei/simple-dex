@@ -24,6 +24,11 @@ type BankKeeper interface {
 	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 }
 
+// ChannelKeeper defines the expected interface needed to retrieve next sequence send.
+type ChannelKeeper interface {
+	GetNextSequenceSend(ctx sdk.Context, portID, channelID string) (uint64, bool)
+}
+
 // TransferKeeper defines the expected interface needed to send transfer packets
 type TransferKeeper interface {
 	SendTransfer(ctx sdk.Context, sourcePort, sourceChannel string, token sdk.Coin, sender sdk.AccAddress,

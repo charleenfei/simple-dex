@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { Reader, Writer } from "protobufjs/minimal";
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
 import { Coin } from "../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "simpledex.simpledex";
@@ -14,7 +15,9 @@ export interface MsgSwap {
   receiver: string;
 }
 
-export interface MsgSwapResponse {}
+export interface MsgSwapResponse {
+  sequence: number;
+}
 
 const baseMsgSwap: object = {
   sender: "",
@@ -163,10 +166,13 @@ export const MsgSwap = {
   },
 };
 
-const baseMsgSwapResponse: object = {};
+const baseMsgSwapResponse: object = { sequence: 0 };
 
 export const MsgSwapResponse = {
-  encode(_: MsgSwapResponse, writer: Writer = Writer.create()): Writer {
+  encode(message: MsgSwapResponse, writer: Writer = Writer.create()): Writer {
+    if (message.sequence !== 0) {
+      writer.uint32(8).uint64(message.sequence);
+    }
     return writer;
   },
 
@@ -177,6 +183,9 @@ export const MsgSwapResponse = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.sequence = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -185,18 +194,29 @@ export const MsgSwapResponse = {
     return message;
   },
 
-  fromJSON(_: any): MsgSwapResponse {
+  fromJSON(object: any): MsgSwapResponse {
     const message = { ...baseMsgSwapResponse } as MsgSwapResponse;
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = Number(object.sequence);
+    } else {
+      message.sequence = 0;
+    }
     return message;
   },
 
-  toJSON(_: MsgSwapResponse): unknown {
+  toJSON(message: MsgSwapResponse): unknown {
     const obj: any = {};
+    message.sequence !== undefined && (obj.sequence = message.sequence);
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgSwapResponse>): MsgSwapResponse {
+  fromPartial(object: DeepPartial<MsgSwapResponse>): MsgSwapResponse {
     const message = { ...baseMsgSwapResponse } as MsgSwapResponse;
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = object.sequence;
+    } else {
+      message.sequence = 0;
+    }
     return message;
   },
 };
@@ -227,6 +247,16 @@ interface Rpc {
   ): Promise<Uint8Array>;
 }
 
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -237,3 +267,15 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+if (util.Long !== Long) {
+  util.Long = Long as any;
+  configure();
+}

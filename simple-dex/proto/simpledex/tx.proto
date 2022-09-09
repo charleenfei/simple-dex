@@ -25,6 +25,7 @@ message MsgSwap {
 }
 
 message MsgSwapResponse {
+uint64 sequence = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message
