@@ -57,7 +57,7 @@ func (k msgServer) Swap(goCtx context.Context, msg *types.MsgSwap) (*types.MsgSw
 		// send the "exchanged" coins to the receiver in the message through transfer
 		senderAddr := k.Keeper.accountKeeper.GetModuleAddress(types.ModuleName)
 		nextSeq, found = k.channelKeeper.GetNextSequenceSend(ctx, msg.PortId, msg.ChannelId)
-		if found {
+		if !found {
 			return &types.MsgSwapResponse{}, errors.New("sequence is not found")
 		}
 		err = k.Keeper.transferKeeper.SendTransfer(ctx, msg.PortId, msg.ChannelId, exchangeCoin, senderAddr, msg.Receiver, clienttypes.Height{}, uint64(ctx.BlockTime().Add(time.Hour).UnixNano()))
